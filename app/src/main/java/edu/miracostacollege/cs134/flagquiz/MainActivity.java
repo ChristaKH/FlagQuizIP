@@ -1,9 +1,11 @@
 package edu.miracostacollege.cs134.flagquiz;
 
+import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             if (!mQuizCountriesList.contains(randomCountry))
                 mQuizCountriesList.add(randomCountry);
         }
+
         // Let's set the text of the 4 buttons to the first 4 country names
         for (int i = 0; i < mButtons.length; i++)
             mButtons[i].setText(mQuizCountriesList.get(i).getName());
@@ -184,7 +187,35 @@ public class MainActivity extends AppCompatActivity {
 
                     // Make text green
                     mAnswerTextView.setTextColor(getResources().getColor(R.color.correct_answer));
+
+                    // Call loadNextFlag after pausing for 2 seconds = 2000 ms
+                    // Use a Handler to delay actions
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadNextFlag();
+                        }
+                    }, 2000);
                 }
+            } else{ // Game over
+                // Create alert dialog with text and some button reset quiz (start new game)
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                double percentage = (double) mCorrectGuesses / mTotalGuesses * 100.0;
+                builder.setMessage(getString(R.string.results, mTotalGuesses, percentage));
+                builder.setPositiveButton(getString(R.string.reset_quiz), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        resetQuiz();
+                    }
+                });
+
+                // Disable the cancel operation (can't cancel dialog)
+                builder.setCancelable(false);
+                // Create dialog
+                builder.create();
+                // SHow dialog
+                builder.show();
+
             }
         } else{ // Incorrect guess
             // disable button
