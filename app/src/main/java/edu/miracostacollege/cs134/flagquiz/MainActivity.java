@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.miracostacollege.cs134.flagquiz.model.Country;
@@ -130,18 +131,27 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, e.getMessage());
         }
 
-        // TODO: Get an InputStream to the asset representing the next flag
-        // TODO: and try to use the InputStream to create a Drawable
-        // TODO: The file name can be retrieved from the correct country's file name.
-        // TODO: Set the image drawable to the correct flag.
+        // DONE: Get an InputStream to the asset representing the next flag
+        // DONE: and try to use the InputStream to create a Drawable
+        // DONE: The file name can be retrieved from the correct country's file name.
+        // DONE: Set the image drawable to the correct flag.
 
-        // TODO: Shuffle the order of all the countries (use Collections.shuffle)
+        // DONE: Shuffle the order of all the countries (use Collections.shuffle)
+        do{
+            Collections.shuffle(mAllCountriesList);
 
-        // TODO: Loop through all 4 buttons, enable them all and set them to the first 4 countries
-        // TODO: in the all countries list
+        }while(mAllCountriesList.subList(0, mButtons.length).contains(mCorrectCountry));
+
+        // DONE: Loop through all 4 buttons, enable them all and set them to the first 4 countries
+        for( int i = 0; i< mButtons.length; i++){
+            mButtons[i].setEnabled(true);
+            mButtons[i].setText(mAllCountriesList.get(i).getName());
+        }
+        // DONE: in the all countries list
 
 
-        // TODO: After the loop, randomly replace one of the 4 buttons with the name of the correct country
+        // DONE: After the loop, randomly replace one of the 4 buttons with the name of the correct country
+        mButtons[rng.nextInt(mButtons.length)].setText(mCorrectCountry.getName());
 
     }
 
@@ -153,10 +163,35 @@ public class MainActivity extends AppCompatActivity {
      * @param v
      */
     public void makeGuess(View v) {
-        // TODO: Downcast the View v into a Button (since it's one of the 4 buttons)
-        // TODO: Get the country's name from the text of the button
+        mTotalGuesses++;
+
+        // DONE: Downcast the View v into a Button (since it's one of the 4 buttons)
+        Button clickedButton = (Button) v;
+
+        // DONE: Get the country's name from the text of the button
+        String guessedName = clickedButton.getText().toString();
 
         // TODO: If the guess matches the correct country's name, increment the number of correct guesses,
+        if(guessedName.equalsIgnoreCase(mCorrectCountry.getName())){
+            mCorrectGuesses++;
+
+            if(mCorrectGuesses < FLAGS_IN_QUIZ){
+                for(int i = 0; i < mButtons.length; i++){
+                    mButtons[i].setEnabled(false);
+
+                    // Change text to correct answer
+                    mAnswerTextView.setText(mCorrectCountry.getName());
+
+                    // Make text green
+                    mAnswerTextView.setTextColor(getResources().getColor(R.color.correct_answer));
+                }
+            }
+        } else{ // Incorrect guess
+            // disable button
+            clickedButton.setEnabled(false);
+            mAnswerTextView.setText(getString(R.string.incorrect_answer));
+            mAnswerTextView.setTextColor(getResources().getColor(R.color.incorrect_answer));
+        }
         // TODO: then display correct answer in green text.  Also, disable all 4 buttons (can't keep guessing once it's correct)
         // TODO: Nested in this decision, if the user has completed all 10 questions, show an AlertDialog
         // TODO: with the statistics and an option to Reset Quiz
