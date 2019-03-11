@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         // DONE: Clear the mAnswerTextView so that it doesn't show text from the previous question
         mAnswerTextView.setText("");
         // DONE: Display current question number in the mQuestionNumberTextView
-        mQuestionNumberTextView.setText(getString(R.string.question, mCorrectGuesses, FLAGS_IN_QUIZ));
+        mQuestionNumberTextView.setText(getString(R.string.question, mCorrectGuesses + 1, FLAGS_IN_QUIZ));
 
         // DONE: Use AssetManager to load next image from assets folder
         AssetManager am = getAssets();
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         // DONE: Get the country's name from the text of the button
         String guessedName = clickedButton.getText().toString();
 
-        // TODO: If the guess matches the correct country's name, increment the number of correct guesses,
+        // DONE: If the guess matches the correct country's name, increment the number of correct guesses,
         if(guessedName.equalsIgnoreCase(mCorrectCountry.getName())){
             mCorrectGuesses++;
 
@@ -187,16 +187,15 @@ public class MainActivity extends AppCompatActivity {
 
                     // Make text green
                     mAnswerTextView.setTextColor(getResources().getColor(R.color.correct_answer));
-
-                    // Call loadNextFlag after pausing for 2 seconds = 2000 ms
-                    // Use a Handler to delay actions
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadNextFlag();
-                        }
-                    }, 2000);
                 }
+                // Call loadNextFlag after pausing for 2 seconds = 2000 ms
+                // Use a Handler to delay actions
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadNextFlag();
+                    }
+                }, 2000);
             } else{ // Game over
                 // Create alert dialog with text and some button reset quiz (start new game)
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -223,12 +222,12 @@ public class MainActivity extends AppCompatActivity {
             mAnswerTextView.setText(getString(R.string.incorrect_answer));
             mAnswerTextView.setTextColor(getResources().getColor(R.color.incorrect_answer));
         }
-        // TODO: then display correct answer in green text.  Also, disable all 4 buttons (can't keep guessing once it's correct)
-        // TODO: Nested in this decision, if the user has completed all 10 questions, show an AlertDialog
-        // TODO: with the statistics and an option to Reset Quiz
+        // DONE: then display correct answer in green text.  Also, disable all 4 buttons (can't keep guessing once it's correct)
+        // DONE: Nested in this decision, if the user has completed all 10 questions, show an AlertDialog
+        // DONE: with the statistics and an option to Reset Quiz
 
-        // TODO: Else, the answer is incorrect, so display "Incorrect Guess!" in red
-        // TODO: and disable just the incorrect button.
+        // DONE: Else, the answer is incorrect, so display "Incorrect Guess!" in red
+        // DONE: and disable just the incorrect button.
 
 
 
